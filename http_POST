@@ -1,0 +1,55 @@
+constant meta = "HTTP POST - xmw.io"
+
+on Load
+
+  let url = "SOME  URL - e.g. for testing try https://requestb.in/"
+
+  let headers = CreateArray()
+
+  let headers[0] = "Authorization: Basic " + base64encode("Admin:Password")
+  let headers[1] = "Content-Type: application/x-www-form-urlencoded"
+  let headers[2] = "X-SPECIAL: xmw"
+
+  let data = "first=alex&last=webster&website=xmw.io"
+
+  let c = Curl_Init()
+
+  curl_setopt(c, CURLOPT_URL, url)
+  //curl_setopt(c, CURLOPT_HEADER, 1)
+  curl_setopt(c, CURLOPT_POST, 1)  //RETURNS HEADER INFO
+  curl_setopt(c, CURLOPT_HTTPHEADER, headers)
+  curl_setopt(c, CURLOPT_POSTFIELDS, data)
+  let r = Curl_Exec(c)
+
+  alert(r)
+
+  Curl_Close(c)
+
+end
+
+/*
+
+TRY DIFFERENT DATA TYPES
+
+"Content-Type:application/xml"     
+
+let data = ""
+let data = data + "<firstName>Alex</firstName>"
+let data = data + "<lastName>Webster</lastName>"
+let data = data + "<website>Webster</website>"
+
+
+"Content-Type:application/json" 
+
+let data = ""
+let data = data + "{"
+let data = data + "'first_name': 'Alex', "
+let data = data + "'last_name': 'Webster' "
+let data = data + "'website': 'xmw.io'"
+let data = data + "}"
+let data = replace(data, "'", "\"")
+
+
+*/
+
+

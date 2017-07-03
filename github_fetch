@@ -1,0 +1,53 @@
+constant meta = "GitHub Fetch - xmw.io"
+
+on load
+
+  let result = Ask("Fetch GitHub File", "text", "File", "")  
+
+  if result["cancel"]       
+    return 1
+  endif
+  
+  let file_name = result["File"]  
+
+  let url = "https://api.github.com/repos/mwscript/xmw/contents/" + file_name
+
+// SET HEADER INFO (IF REQUIRED)
+
+  let headers = CreateArray()
+  let headers[0] = "User-Agent: mwscript"  // https://developer.github.com/v3/#user-agent-required
+  let headers[01] = "Accept: application/vnd.github.VERSION.raw"  // 
+
+  let c = Curl_Init()
+
+
+// SET CURL OPTIONS AND EXECUTE REQUEST
+
+  curl_setopt(c, CURLOPT_URL, url)
+  curl_setopt(c, CURLOPT_HEADER, 0)  // SET TO 0 TO AVOID RETURNING HEADER INFO
+  curl_setopt(c, CURLOPT_HTTPHEADER, headers)
+  let r = Curl_Exec(c)
+  Curl_Close(c)
+
+
+// PARSE THE JSON RESPONSE
+
+  let xml = ""
+  let xml = xml + "<?xml version=\"1.0\"?>"
+  let xml = xml + "<moneyworks>"
+  let xml = xml + "<install>"
+  let xml = xml + "<script enable=\"false\" name=\"" + "hand" + "\"><![CDATA["  
+  let xml = xml + r
+  let xml = xml + "]]></script>"
+  let xml = xml + "</install>"
+  let xml = xml + "</moneyworks>"
+
+// SAVE XML FILE
+
+  let fd = File_Open(file_name + ".mwxml", "w") // creates in ~/Desktop/
+  if fd <> NULL
+    File_Write(fd, xml)
+    File_Close(fd)
+ endif
+
+end

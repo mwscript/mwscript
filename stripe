@@ -1,0 +1,70 @@
+constant meta = "Stripe - xmw.io"
+
+on Load
+
+  let amount = "100"
+  let currency = "nzd"
+  let description = "XMW.IO SUBSCRIPTION"
+  let card_name = "Joe Bloggs"
+  let card_number = "4242424242424242"  // this is the test credit card number
+  let exp_month = "09"
+  let exp_year = "19"
+  
+// YOU CAN ASSEMBLE THE PARAMETER STRING LIKE THIS
+// (WHICH I THINK IS MORE READABLE)
+
+  let data = ""
+  let data = data + "amount=" + amount
+  let data = data + "&currency=" + currency
+  let data = data + "&description=\"" + description +"\""
+  let data = data + "&source[object]=card"
+  let data = data + "&source[name]=" + card_name
+  let data = data + "&source[number]=" + card_number
+  let data = data + "&source[exp_month]=" + exp_month
+  let data = data + "&source[exp_year]=" + exp_year
+ 
+  syslog(data)
+  
+// ... OR YOU COULD CONCACATE THE PARAMETERS LIKE THIS  
+  
+  let amount = "amount=" + amount
+  let currency = "currency=" + currency
+  let description = "description=\"" + description +"\""
+  let source_object = "source[object]=card"
+ let source_name = "source[name]=" + card_name
+  let source_number = "source[number]=" + card_number
+  let source_exp_month = "source[exp_month]=" + exp_month
+  let source_exp_year = "source[exp_year]=" + exp_year  
+  
+  let data = concatwith("&", amount, currency, description, source_object, source_name, source_number, source_exp_month, source_exp_year)
+  
+  syslog(data)
+  
+// ... OR ELSE ASSEMBLE IT HOWEVER YOU PREFER
+
+
+// POST DATA USING CURL LIBRARY
+
+let url = "https://api.stripe.com/v1/charges"
+  
+  
+  let secret_key = "YOUR STRIPE SECRET KEY"
+
+  let headers = CreateArray()
+  let headers[0] = "Authorization: Bearer " + secret_key
+  let headers[1] = "Content-Type: application/x-www-form-urlencoded"
+
+  let ch = Curl_Init()
+
+  curl_setopt(ch, CURLOPT_URL, url)
+  curl_setopt(ch, CURLOPT_HEADER, 0)
+  curl_setopt(ch, CURLOPT_POST, 1)
+  curl_setopt(ch, CURLOPT_HTTPHEADER, headers)
+  curl_setopt(ch, CURLOPT_POSTFIELDS, data)     
+  let r = Curl_Exec(ch)
+
+  Curl_Close(ch)
+
+  syslog(r)
+                
+end

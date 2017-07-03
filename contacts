@@ -1,0 +1,19 @@
+constant meta = "Contacts - xmw.io"
+
+on load
+ 
+  let acc_names = createselection("Name", "**")     
+    
+  foreach n in name acc_names 
+    
+    let sequence_number = n.SequenceNumber
+    
+    let acc_contacts = createselection("Contacts", "ParentSeq = " + sequence_number)
+     
+    foreach c in contacts acc_contacts      
+
+      syslog(c.contact)  
+     
+    endfor     
+  endfor   
+end

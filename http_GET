@@ -1,0 +1,40 @@
+constant meta = "HTTP GET - xmw.io"
+
+on load
+
+// SET HEADER INFO (IF REQUIRED)
+
+let url = "https://api.github.com/users/mwscript/repos"
+let headers = CreateArray()
+let headers[0] = "User-Agent: mwscript"  // this is a github requirement - https://developer.github.com/v3/#user-agent-required
+
+let c = Curl_Init()
+
+
+// SET CURL OPTIONS AND EXECUTE REQUEST
+
+curl_setopt(c, CURLOPT_URL, url)
+curl_setopt(c, CURLOPT_HEADER, 0)  // SET TO 0 TO AVOID RETURNING HEADER INFO
+curl_setopt(c, CURLOPT_HTTPHEADER, headers)
+let r = Curl_Exec(c)
+Curl_Close(c)
+
+
+// PARSE THE JSON RESPONSE
+
+let r_json = json_parse(R)      
+let i = 0    
+
+
+// LOOPING OVER AN ARRAY OF JSON OBJECTS
+    
+while not (json_get(r_json, i) == NULL)       
+    
+  let repo = json_get(r_json, i)
+  let repo_id = json_get(repo, "id") 
+  syslog(repo_id)
+  let i = i + 1
+
+endwhile
+
+end

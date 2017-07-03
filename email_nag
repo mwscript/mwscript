@@ -1,0 +1,15 @@
+constant meta = "New Customer Script" 
+
+on Validate:f_nameform (WindowRef)   
+
+  let account_name = GetfieldValue(WindowRef,"e_name")  
+  let email_address = GetfieldValue(WindowRef,"e_email")   
+  
+  if email_address = ""
+    Alert(account_name + " does not have an email address")   
+    // return 0
+  endif
+  
+  return 1
+
+end

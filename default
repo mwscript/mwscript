@@ -1,0 +1,5 @@
+constant meta = "Script by YOUR NAME. http://YOUR_URL"
+
+on Load
+	
+end

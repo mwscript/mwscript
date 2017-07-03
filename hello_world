@@ -1,0 +1,10 @@
+constant meta = "Hello World - xmw.io"
+
+on Load
+  Alert("Hello World!")  	
+end
+
+on unload
+  syslog("goodbye")
+end
+ 

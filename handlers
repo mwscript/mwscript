@@ -1,0 +1,129 @@
+constant meta = "Handlers - xmw.io"
+
+// =======================================================================================
+// This fires on manual activation of the script
+// and (if activated) whenever a MoneyWorks user logs on	
+// =======================================================================================
+
+on Load  
+  Alert("Hello World! Again")
+end
+
+
+// =======================================================================================
+// This fires on opening of any transaction list / view
+// (e.g. Sales Invoices, Sales Orders, Receipts etc.)
+// =======================================================================================
+
+on Before:F_TRANSLIST(windowRef)  
+  syslog(windowRef)  
+end
+
+
+// =======================================================================================
+// This only fires when the Sales Order list / view opens:
+// Note the addition of the ':SO' qualifier above
+// =======================================================================================
+
+on Before:F_TRANSLIST:SO(windowRef) 
+  
+// use the 'windowRef' to get the window's name...
+  let window_id = GetWindowID (windowRef)
+  
+// ... and show the window's ID ('F_TRANSLIST', in this case)
+  Alert(window_id)  
+end
+
+
+// =======================================================================================
+// This fires whenever you attempt to leave any field 
+// on any form
+// =======================================================================================
+
+on ValidateField(windowRef, fieldNameString, fieldValueString)  
+  Alert(fieldNameString + ": " + fieldNameString)
+  return 1
+end
+
+
+// =======================================================================================
+// This only fires when you attempt to leave
+// the 'e_user1' field on a Sales Order form
+// =======================================================================================
+
+on ValidateField:f_trans:e_user1:SO(windowRef, fieldNameString, fieldValueString)  
+  syslog("User 1 value: " + fieldValueString)
+  
+// The following requires the user to enter the word 'spoon' 
+// in the User 1 field and returns 0 if the don't
+// IMPORTANT: BE NICE and alert an explanation for the 0 return
+  
+  if fieldValueString != "spoon"  
+    Alert("No, you must type 'spoon' here")
+    return 0    
+  else  
+    return 1
+  endif
+  
+end
+
+
+// =======================================================================================
+// This fires on opening of any transaction list / view
+// and installs a toolbar icon called "DEAL"
+// =======================================================================================
+
+on Before:F_TRANSLIST(windowRef)
+  InstallToolbarIcon(windowRef, "DEAL")
+end
+
+
+// =======================================================================================
+// This only fires when the Sales Order list / view opens:
+// Note the addition of the ':SO' qualifier
+// It also installs a toolbar icon caled "SELL"
+// =======================================================================================
+
+on Before:F_TRANSLIST:SO(windowRef)
+  InstallToolbarIcon(windowRef, "SELL")
+end
+
+
+// =======================================================================================
+// Similarly, this installs a toolbar icon caled "SELL"
+// on the Purchase Order list / view
+// =======================================================================================
+
+on Before:F_TRANSLIST:PO(windowRef)
+  InstallToolbarIcon(windowRef, "BUY")
+end
+
+
+// =======================================================================================
+// This fires when a user clicks the toolbar icon
+// we called "SELL"
+// =======================================================================================
+
+on SELL
+  Alert("Sell! Sell! Sell!")
+end
+
+
+// =======================================================================================
+// This 'on Load' script installs a menu command
+// Which you will find under the 'Command' menu
+// =======================================================================================
+
+on Load
+  InstallMenuCommand("GO", "GO")  
+end
+
+
+// =======================================================================================
+// This fires when a user clicks the menu command
+// we called "GO"
+// =======================================================================================
+
+on SELL
+  Alert("Go! Go! Go!")
+end

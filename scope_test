@@ -1,0 +1,5 @@
+constant meta = "Scope Test - xmw.io"
+
+on Load
+ Scope:alert_doc()
+end

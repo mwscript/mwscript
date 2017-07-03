@@ -1,0 +1,27 @@
+constant meta = "Scope - xmw.io"
+
+// 'PROPERTY' VARIABLE IS AVAILABLE TO EVERY HANDLER IN THIS SCRIPT
+
+property user_ref = ""
+
+
+// 'LET' VARIABLES ARE ONLY AVAILABLE TO THEIR HANDLER
+//  HERE WE SET THE 'USER_REF' PROPERTY...
+
+on Validate:F_TRANS:SO(WindowRef)  
+  let user_ref = GetfieldValue(WindowRef,"e_userref")  
+  let to_from = GetfieldValue(WindowRef,"e_to")
+end
+
+// ... WHICH WE CAN READ FROM WITHIN ANOTHER HANDLER
+
+on Validate:F_DEPOSIT(WindowRef)
+  Alert(user_ref)
+  // Alert (to_from)
+end
+
+// 'PUBLIC' HANDLERS CAN BE CALLED FROM OTHER SCRIPTS
+
+on alert_doc public  
+  Alert(DocumentName)
+end

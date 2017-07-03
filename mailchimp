@@ -1,0 +1,46 @@
+constant meta = "mailchimp - xmw.io"
+
+on Load
+
+  let result = Ask("Add to Mailchimp", "text", "First", "popup", "text", "Email")        
+  
+  if result["Cancel"]   
+    Alert("cancelled")
+    return 1
+  endif
+           
+  let first_name = result["First"]
+  let last_name = result["Last"]    
+  let email_address = result["Email"]   
+    
+      
+        
+  let data = "{"    
+  let data = data + "\"email_address\":\"" + email_address + "\","
+  let data = data + "\"merge_vars\": {\"FNAME\" : \"" + first_name + "\", \"LNAME\": \"" + last_name + "\" }, "
+  let data = data + "\"status\": \"subscribed\""  
+  let data = data + "}"   
+  
+  
+  let id = "YOUR MAILCHIMP LIST ID"
+  let user_name = "YOUR MAILCHIMP USERNAME"
+  let key = "YOUR MAILCHIMP KEY"
+      
+  let url =  "https://us1.api.mailchimp.com/3.0/lists/" + id + "/members"
+  let auth = user_name + ":" + key
+  let content_type= "Content-Type:application/json"     
+  
+  let headers = CreateArray()
+  let headers[0] = "Authorization: Basic " + base64encode(auth)
+  let headers[1] = content_type
+
+  let ch = Curl_Init()
+  curl_setopt(ch, CURLOPT_URL, url)
+  curl_setopt(ch, CURLOPT_HEADER, 0)
+  curl_setopt(ch, CURLOPT_POST, 1)  
+  curl_setopt(ch, CURLOPT_POSTFIELDS, data)
+  curl_setopt(ch, CURLOPT_HTTPHEADER, headers)
+  let r = Curl_Exec(ch)
+  Curl_Close(ch)       
+	
+end
