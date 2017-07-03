@@ -4,7 +4,7 @@ on Load
 
   let amount = "100"
   let currency = "nzd"
-  let description = "XMW.IO SUBSCRIPTION"
+  let description = "MWSCRIPT SUBSCRIPTION"
   let card_name = "Joe Bloggs"
   let card_number = "4242424242424242"  // this is the test credit card number
   let exp_month = "09"
@@ -31,7 +31,7 @@ on Load
   let currency = "currency=" + currency
   let description = "description=\"" + description +"\""
   let source_object = "source[object]=card"
- let source_name = "source[name]=" + card_name
+  let source_name = "source[name]=" + card_name
   let source_number = "source[number]=" + card_number
   let source_exp_month = "source[exp_month]=" + exp_month
   let source_exp_year = "source[exp_year]=" + exp_year  

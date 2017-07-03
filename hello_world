@@ -1,4 +1,4 @@
-constant meta = "Hello World - xmw.io"
+constant meta = "Hello World - mwscript.com"
 
 on Load
   Alert("Hello World!")  	

@@ -1,4 +1,4 @@
-constant meta = "Scope Test - xmw.io"
+constant meta = "Scope Test - mwscript.com"
 
 on Load
  Scope:alert_doc()

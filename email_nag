@@ -1,4 +1,4 @@
-constant meta = "New Customer Script" 
+constant meta = "Email Nag - mwscript.com" 
 
 on Validate:f_nameform (WindowRef)   
 
